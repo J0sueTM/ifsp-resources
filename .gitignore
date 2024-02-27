@@ -3,3 +3,5 @@
 
 # Ignore Gradle build output directory
 /ums/build
+/ums/.vscode
+/ums/bin

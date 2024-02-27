@@ -1,15 +1,14 @@
-package com.j0suetm.ums.services;
+package com.j0suetm.ums.services.db;
 
-import com.j0suetm.ums.db.ConnectionManager;
+import com.j0suetm.ums.services.db.ConnectionManager;
 
-import java.util.UUID;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Service {
+public class DBService {
   private Connection conn;
 
-  public Service() {
+  public DBService() {
     try {
       this.conn = ConnectionManager.getConnection();
     } catch (SQLException e) {

@@ -1,7 +1,8 @@
-package com.j0suetm.ums.db;
+package com.j0suetm.ums.services.db;
 
-import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 

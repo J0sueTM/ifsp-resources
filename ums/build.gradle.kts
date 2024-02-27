@@ -12,7 +12,8 @@ dependencies {
   implementation(libs.guava)
   implementation("org.postgresql:postgresql:42.7.2")
   implementation("com.zaxxer:HikariCP:5.1.0")
-
+  implementation("org.openjfx:javafx-swing:23-ea+3")
+  implementation("com.formdev:flatlaf:3.4")
 }
 
 buildscript {
