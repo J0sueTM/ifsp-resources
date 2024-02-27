@@ -1,0 +1,10 @@
+services:
+  pg:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: j0suetm
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ums_db
+    ports:
+      - 5432:5432
