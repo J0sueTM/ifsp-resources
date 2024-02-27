@@ -5,8 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Ums {
-  public Ums() {
-  }
+  public Ums() {}
   
   public void run() {
     Connection conn;

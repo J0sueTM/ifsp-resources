@@ -8,5 +8,6 @@ public class UserModel
   public String name;
   public String cpf;
   public String gender;
+  public String street;
   public String state;
 }
