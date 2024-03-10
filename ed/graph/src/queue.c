@@ -6,18 +6,18 @@ void end_queue(Queue *q) {
   }
 
   while (q->start) {
-    dequeue_node(q);
+    dequeue(q);
   }
 }
 
-void enqueue_node(Queue *q, Node *n) {
+void enqueue(Queue *q, Edge *e) {
   QueueNode *new_qnode = (QueueNode *)malloc(sizeof(QueueNode));
   if (!new_qnode) {
-    fprintf(stderr, "failed to allocate new queue node\n");
+    fprintf(stderr, "failed to allocate new queue edge\n");
 
     return;
   }
-  new_qnode->node = n;
+  new_qnode->edge = e;
 
   if (!q->start) {
     q->start = new_qnode;
@@ -33,17 +33,17 @@ void enqueue_node(Queue *q, Node *n) {
   q->end = new_qnode;
 }
 
-Node *dequeue_node(Queue *q) {
+Edge *dequeue(Queue *q) {
   if (!q) {
     return NULL;
   } else if (!q->start) {
     return NULL;
   }
   
-  Node *node = q->start->node;
+  Edge *edge = q->start->edge;
   QueueNode *next_qnode = q->start->next;
   free(q->start);
   q->start = next_qnode;
 
-  return node;
+  return edge;
 }
