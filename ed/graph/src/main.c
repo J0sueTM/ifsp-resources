@@ -1,7 +1,10 @@
 #include "./graph.h"
 #include "./queue.h"
 
+#include <stdbool.h>
 #include <string.h>
+
+#define MAX_VISITED_EDGES 255
 
 typedef enum SearchMethod {
   SIMPLE, BFS, DFS
@@ -10,7 +13,7 @@ typedef enum SearchMethod {
 Edge *populate_graph();
 void print_graph_simple (Edge *e);
 void print_graph_dfs(Edge *e /* TODO Stack *s */);
-void print_graph_bfs(Edge *e, Queue *q);
+void print_graph_bfs(Queue *q, Edge **visited, int visited_count);
 
 int main(int argc, char *argv[]) {
   SearchMethod sm = SIMPLE;
@@ -23,7 +26,7 @@ int main(int argc, char *argv[]) {
   }
 
   Edge *root = populate_graph();
-
+  
   switch (sm) {
   case DFS:
     print_graph_dfs(root);
@@ -31,7 +34,14 @@ int main(int argc, char *argv[]) {
     break;
   case BFS: {
     Queue q;
-    print_graph_bfs(root, &q);
+    q.start = NULL;
+    q.end = NULL;
+    enqueue(&q, root);
+    Edge *visited_edges[MAX_VISITED_EDGES];
+    memset(visited_edges, 0x00, MAX_VISITED_EDGES * sizeof(Edge *));
+    visited_edges[0] = root;
+    
+    print_graph_bfs(&q, visited_edges, 1);
   } break;
   case SIMPLE:
   default:
@@ -96,15 +106,32 @@ void print_graph_dfs(Edge *e /* TODO Stack *s */) {
   fprintf(stderr, "IMPLEMENT ME");
 }
 
-void print_graph_bfs(Edge *e, Queue *q) {
-  // Node *pnode = dequeue_node(q);
-  // if (!pnode) {
-  //   return;
-  // }
-  //  
-  // printf("\n%d", node->data);
-  //  
-  // for (int i = 0; i < node->children_count; ++i) {
-  //   enqueue_node(q, node->children[i]);
-  // }
+void print_graph_bfs(Queue *q, Edge **visited, int visited_count) {
+  Edge *e = dequeue(q);
+  if (!e) {
+    return;
+  }
+
+  printf("%d ", e->data);
+
+  int new_visited_count = visited_count;
+  for (int i = 0; i < e->neighbour_count; ++i) {
+    Edge *ne = e->neighbours[i];
+    bool ne_visited = false;
+    for (Edge **tmpe = visited; *tmpe != NULL; ++tmpe) {
+      if ((*tmpe)->data == ne->data) {
+        ne_visited = true;
+
+        break;
+      }
+    }
+
+    if (!ne_visited) {
+      enqueue(q, ne);
+      visited[new_visited_count - 1] = ne;
+      ++new_visited_count;
+    }
+  }
+
+  print_graph_bfs(q, visited, new_visited_count);
 }
