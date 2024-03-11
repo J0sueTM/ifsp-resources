@@ -1,5 +1,6 @@
 #include "./graph.h"
 #include "./queue.h"
+#include "./stack.h"
 
 #include <stdbool.h>
 #include <string.h>
@@ -11,8 +12,9 @@ typedef enum SearchMethod {
 } SearchMethod;
 
 Edge *populate_graph();
+bool has_edge_been_visited(Edge **visited, Edge *e);
 void print_graph_simple (Edge *e);
-void print_graph_dfs(Edge *e /* TODO Stack *s */);
+void print_graph_dfs(Stack *s, Edge **visited, int visited_count);
 void print_graph_bfs(Queue *q, Edge **visited, int visited_count);
 
 int main(int argc, char *argv[]) {
@@ -26,22 +28,30 @@ int main(int argc, char *argv[]) {
   }
 
   Edge *root = populate_graph();
-  
-  switch (sm) {
-  case DFS:
-    print_graph_dfs(root);
 
-    break;
+  Edge *visited_edges[MAX_VISITED_EDGES];
+  memset(visited_edges, 0x00, MAX_VISITED_EDGES * sizeof(Edge *));
+  visited_edges[0] = root;
+
+  switch (sm) {
+  case DFS: {
+    Stack s;
+    s.root = NULL;
+    push_stack(&s, root);
+
+    print_graph_dfs(&s, visited_edges, 1);
+
+    end_stack(&s);
+  } break;
   case BFS: {
     Queue q;
     q.start = NULL;
     q.end = NULL;
     enqueue(&q, root);
-    Edge *visited_edges[MAX_VISITED_EDGES];
-    memset(visited_edges, 0x00, MAX_VISITED_EDGES * sizeof(Edge *));
-    visited_edges[0] = root;
     
     print_graph_bfs(&q, visited_edges, 1);
+
+    end_queue(&q);
   } break;
   case SIMPLE:
   default:
@@ -86,6 +96,16 @@ Edge *populate_graph() {
   return a;
 }
 
+bool has_edge_been_visited(Edge **visited, Edge *e) {
+  for (Edge **tmpe = visited; *tmpe != NULL; ++tmpe) {
+    if ((*tmpe)->data == e->data) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /*
   NOTE: This function is supposed to repeat edges, its here
   for debugging purposes only!
@@ -102,8 +122,31 @@ void print_graph_simple(Edge *e) {
   printf("%d ", e->data);
 }
 
-void print_graph_dfs(Edge *e /* TODO Stack *s */) {
-  fprintf(stderr, "IMPLEMENT ME");
+void print_graph_dfs(
+  Stack *s,
+  Edge **visited,
+  int visited_count
+) {
+  Edge *e = pop_stack(s);
+  if (!e) {
+    return;
+  }
+
+  printf("%d ", e->data);
+
+  int new_visited_count = visited_count;
+  for (int i = 0; i < e->neighbour_count; ++i) {
+    Edge *ne = e->neighbours[i];
+    bool ne_visited = has_edge_been_visited(visited, ne);
+
+    if (!ne_visited) {
+      push_stack(s, ne);
+      visited[new_visited_count - 1] = ne;
+      ++new_visited_count;
+    }
+  }
+
+  print_graph_dfs(s, visited, new_visited_count);
 }
 
 void print_graph_bfs(Queue *q, Edge **visited, int visited_count) {
@@ -117,14 +160,7 @@ void print_graph_bfs(Queue *q, Edge **visited, int visited_count) {
   int new_visited_count = visited_count;
   for (int i = 0; i < e->neighbour_count; ++i) {
     Edge *ne = e->neighbours[i];
-    bool ne_visited = false;
-    for (Edge **tmpe = visited; *tmpe != NULL; ++tmpe) {
-      if ((*tmpe)->data == ne->data) {
-        ne_visited = true;
-
-        break;
-      }
-    }
+    bool ne_visited = has_edge_been_visited(visited, ne);
 
     if (!ne_visited) {
       enqueue(q, ne);
