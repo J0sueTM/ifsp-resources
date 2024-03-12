@@ -14,7 +14,6 @@ public class UserRowComponent
   extends JPanel
 {
   private JPanel infoPnl;
-  private JPanel pfpPnl;
   private JPanel actionsPnl;
 
   private JLabel aboutLbl;
@@ -26,12 +25,6 @@ public class UserRowComponent
     this.setLayout(new FlowLayout());
     this.setPreferredSize(new Dimension(300, 80));
     this.setMaximumSize(new Dimension(300, 100));
-
-    this.pfpPnl = new JPanel();
-    this.pfpPnl.setPreferredSize(new Dimension(50, 50));
-    this.pfpPnl.setBackground(Color.blue);
-     
-    this.add(pfpPnl);
 
     this.infoPnl = new JPanel(new GridLayout(2, 1));
 

@@ -20,19 +20,6 @@ public class UserManagerView
   private JButton newUserBtn;
 
   public UserManagerView() {
-    BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
-    this.setLayout(bl);
-
-    this.headerPnl = new JPanel(new FlowLayout());
-
-    this.userCountLbl = new JLabel("2 users");
-    this.newUserBtn = new JButton("Register new user");
-
-    this.headerPnl.add(this.userCountLbl);
-    this.headerPnl.add(this.newUserBtn);
-
-    this.add(this.headerPnl);
-
     UserModel[] users = new UserModel[4];
     users[0] = new UserModel();
     users[0].name = "josue teodoro";
@@ -46,6 +33,19 @@ public class UserManagerView
     users[3] = new UserModel();
     users[3].name = "guto cabeca de prego";
     users[3].cpf = "467.795.808-58";
+
+    BoxLayout bl = new BoxLayout(this, BoxLayout.Y_AXIS);
+    this.setLayout(bl);
+
+    this.headerPnl = new JPanel(new FlowLayout());
+
+    this.userCountLbl = new JLabel(users.length + " users");
+    this.newUserBtn = new JButton("Register new user");
+
+    this.headerPnl.add(this.userCountLbl);
+    this.headerPnl.add(this.newUserBtn);
+
+    this.add(this.headerPnl);
     
     this.ulCmp = new UserListComponent(users);
     this.add(this.ulCmp);
