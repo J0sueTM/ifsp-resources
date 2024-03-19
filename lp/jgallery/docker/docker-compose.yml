@@ -1,0 +1,16 @@
+services:
+  pg:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: j0suetm
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: jgallery-db
+    ports:
+      - 8000:5432
+  s3:
+    image: localstack/localstack:s3-latest
+    restart: always
+    ports:
+      - 4566:4566
+      - "4510-4559:4510-4559"
