@@ -16,6 +16,11 @@ services:
   s3:
     image: localstack/localstack:s3-latest
     restart: always
+    environment:
+      - AWS_ACCESS_KEY_ID=j0suetm-jgallery
+      - AWS_SECRET_ACCESS_KEY=secret-key
+      - AWS_DEFAULT_REGION=us-east-1
+      - DEBUG=-1
     ports:
       - 4566:4566
       - 4510-4559:4510-4559
