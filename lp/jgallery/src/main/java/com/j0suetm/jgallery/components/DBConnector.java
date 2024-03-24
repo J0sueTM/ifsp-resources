@@ -5,8 +5,13 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class DBConnector {
+  private static final Logger logger =
+    Logger.getLogger(DBConnector.class.getName());
+
   private static HikariDataSource dataSource;
 
   public static void connect(
@@ -20,11 +25,24 @@ public class DBConnector {
     config.setPassword(password);
 
     dataSource = new HikariDataSource(config);
+
+    logger.log(Level.FINE, "connected to db");
   }
 
-  public static Connection getConnection()
-    throws SQLException
-  {
-    return dataSource.getConnection();
+  public static Connection getConnection() {
+    Connection conn;
+    try {
+      conn = dataSource.getConnection();
+    } catch (SQLException ex) {
+      logger.log(
+        Level.SEVERE,
+        "failed to get db connection -- {0}",
+        ex.getMessage()
+      );
+
+      return null;
+    }
+
+    return conn;
   }
 }
