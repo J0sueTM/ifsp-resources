@@ -56,4 +56,20 @@ class PhotoDBServiceTest {
     assertEquals(res.level(), "INFO");
     assertEquals(res.message(), "created photo succesfully");
   }
+
+  @Test
+  void shouldRetrievePhoto() {
+    PhotoDBService pdbSrvc = new PhotoDBService();
+
+    UUID id = UUID.randomUUID();
+    PhotoModel photo = new PhotoModel(id, "a southern brazilian landscape");
+
+    pdbSrvc.create(photo);
+
+    ResultModel res = pdbSrvc.getById(id);
+    assertEquals(res.level(), "INFO");
+
+    PhotoModel retrievedPhoto = (PhotoModel)res.data();
+    assertEquals(photo, retrievedPhoto);
+  }
 }

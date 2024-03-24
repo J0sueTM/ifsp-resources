@@ -57,13 +57,13 @@ public class PhotoDBService
     } catch (SQLException ex) {
       logger.log(
         Level.SEVERE,
-        "failed to create user on db -- {0}",
+        "failed to create photo on db -- {0}",
         ex.getMessage()
       );
 
       return new ResultModel(
         "ERROR",
-        "failed to create user",
+        "failed to create photo on db",
         null
       );
     }
@@ -77,7 +77,55 @@ public class PhotoDBService
 
   @Override
   public ResultModel getById(UUID id) {
-    return new ResultModel("ERROR", "NOT IMPLEMENTED", null);
+    Connection conn = DBConnector.getConnection();
+    if (conn == null) {
+      return new ResultModel(
+        "ERROR",
+        "db connection unavailable",
+        null
+      );
+    }
+
+    PhotoModel photo;
+    String query = "SELECT id, description FROM photos WHERE id = ?;";
+    try {
+      PreparedStatement pstmt = conn.prepareStatement(query);
+
+      pstmt.setObject(1, id);
+
+      ResultSet rs = pstmt.executeQuery();
+      boolean hasFirst = rs.next();
+      if (!hasFirst) {
+        return new ResultModel(
+          "ERROR",
+          "photo with given id does not exist",
+          null
+        );
+      }
+
+      photo = new PhotoModel(
+        (UUID)rs.getObject("id"),
+        rs.getString("description")
+      );
+    } catch (SQLException ex) {
+      logger.log(
+        Level.SEVERE,
+        "failed to retrieve photo from db -- {0}",
+        ex.getMessage()
+      );
+
+      return new ResultModel(
+        "ERROR",
+        "failed to retrieve photo from db",
+        null
+      );
+    }
+
+    return new ResultModel(
+      "INFO",
+      "retrieved photo successfully",
+      photo
+    );
   }
 
   @Override
