@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface DBService {
   public ResultModel create(Record r);
-  public ResultModel getById(UUID id);
-  public ResultModel updateById(UUID id, Record r);
-  public ResultModel deleteById(UUID id);
+  public ResultModel getByID(UUID id);
+  public ResultModel updateByID(UUID id, Record r);
+  public ResultModel deleteByID(UUID id);
 }

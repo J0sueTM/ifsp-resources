@@ -76,7 +76,7 @@ public class PhotoDBService
   }
 
   @Override
-  public ResultModel getById(UUID id) {
+  public ResultModel getByID(UUID id) {
     Connection conn = DBConnector.getConnection();
     if (conn == null) {
       return new ResultModel(
@@ -129,7 +129,7 @@ public class PhotoDBService
   }
 
   @Override
-  public ResultModel updateById(UUID id, Record r)
+  public ResultModel updateByID(UUID id, Record r)
     throws IllegalArgumentException
   {
     if (!(r instanceof PhotoModel)) {
@@ -195,7 +195,41 @@ public class PhotoDBService
   }
 
   @Override
-  public ResultModel deleteById(UUID id) {
-    return new ResultModel("ERROR", "NOT IMPLEMENTED", null);
+  public ResultModel deleteByID(UUID id) {
+    Connection conn = DBConnector.getConnection();
+    if (conn == null) {
+      return new ResultModel(
+        "ERROR",
+        "db connection unavailable",
+        null
+      );
+    }
+
+    String query = "DELETE FROM photos WHERE id = ?;";
+    try {
+      PreparedStatement pstmt = conn.prepareStatement(query);
+
+      pstmt.setObject(1, id);
+
+      pstmt.execute();
+    } catch (SQLException ex) {
+      logger.log(
+        Level.SEVERE,
+        "failed to delete photo from db -- {0}",
+        ex.getMessage()
+      );
+
+      return new ResultModel(
+        "ERROR",
+        "failed to delete photo from db",
+        null
+      );
+    }
+
+    return new ResultModel(
+      "INFO",
+      "deleted photo succesfully",
+      null
+    );
   }
 }

@@ -66,7 +66,7 @@ class PhotoDBServiceTest {
 
     pdbSrvc.create(photo);
 
-    ResultModel res = pdbSrvc.getById(id);
+    ResultModel res = pdbSrvc.getByID(id);
     assertEquals(res.level(), "INFO");
 
     PhotoModel retrievedPhoto = (PhotoModel)res.data();
@@ -83,10 +83,22 @@ class PhotoDBServiceTest {
 
     pdbSrvc.create(oldPhoto);
 
-    ResultModel res = pdbSrvc.updateById(id, newPhoto);
+    ResultModel res = pdbSrvc.updateByID(id, newPhoto);
     assertEquals(res.level(), "INFO");
 
     PhotoModel updatedPhoto = (PhotoModel)res.data();
     assertEquals(updatedPhoto, newPhoto);
+  }
+
+  @Test
+  void shouldDeletePhoto() {
+    PhotoDBService pdbSrvc = new PhotoDBService();
+
+    UUID id = UUID.randomUUID();
+    pdbSrvc.create(new PhotoModel(id, "bye world"));
+
+    ResultModel res = pdbSrvc.deleteByID(id);
+    assertEquals(res.level(), "INFO");
+    assertEquals(res.message(), "deleted photo succesfully");
   }
 }
