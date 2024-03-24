@@ -11,3 +11,4 @@ plugins {
 }
 
 rootProject.name = "jgallery"
+include("app")

@@ -8,14 +8,9 @@ services:
       POSTGRES_DB: jgallery-db
     ports:
       - 8000:5432
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
   s3:
     image: localstack/localstack:s3-latest
     restart: always
     ports:
       - 4566:4566
-      - 4510-4559:4510-4559
+      - "4510-4559:4510-4559"
