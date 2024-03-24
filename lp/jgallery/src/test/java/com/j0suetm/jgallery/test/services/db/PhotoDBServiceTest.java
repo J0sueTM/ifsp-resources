@@ -70,6 +70,23 @@ class PhotoDBServiceTest {
     assertEquals(res.level(), "INFO");
 
     PhotoModel retrievedPhoto = (PhotoModel)res.data();
-    assertEquals(photo, retrievedPhoto);
+    assertEquals(retrievedPhoto, photo);
+  }
+
+  @Test
+  void shouldUpdatePhoto() {
+    PhotoDBService pdbSrvc = new PhotoDBService();
+
+    UUID id = UUID.randomUUID();
+    PhotoModel oldPhoto = new PhotoModel(id, "3 elders drinking vodka");
+    PhotoModel newPhoto = new PhotoModel(id, "4 elders drinking water");
+
+    pdbSrvc.create(oldPhoto);
+
+    ResultModel res = pdbSrvc.updateById(id, newPhoto);
+    assertEquals(res.level(), "INFO");
+
+    PhotoModel updatedPhoto = (PhotoModel)res.data();
+    assertEquals(updatedPhoto, newPhoto);
   }
 }

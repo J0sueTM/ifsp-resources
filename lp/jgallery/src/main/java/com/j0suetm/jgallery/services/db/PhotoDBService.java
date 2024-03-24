@@ -97,7 +97,7 @@ public class PhotoDBService
       boolean hasFirst = rs.next();
       if (!hasFirst) {
         return new ResultModel(
-          "ERROR",
+          "WARNING",
           "photo with given id does not exist",
           null
         );
@@ -129,8 +129,69 @@ public class PhotoDBService
   }
 
   @Override
-  public ResultModel updateById(UUID id, Record r) {
-    return new ResultModel("ERROR", "NOT IMPLEMENTED", null);
+  public ResultModel updateById(UUID id, Record r)
+    throws IllegalArgumentException
+  {
+    if (!(r instanceof PhotoModel)) {
+      throw new IllegalArgumentException("expected instance of PhotoModel");
+    }
+    PhotoModel newPhoto = (PhotoModel)r;
+
+    Connection conn = DBConnector.getConnection();
+    if (conn == null) {
+      return new ResultModel(
+        "ERROR",
+        "db connection unavailable",
+        null
+      );
+    }
+
+    PhotoModel updatedPhoto;
+    String query =
+      "UPDATE photos SET" +
+      "  description = ? " +
+      "WHERE id=? " +
+      "RETURNING *;";
+    try {
+      PreparedStatement pstmt = conn.prepareStatement(query);
+
+      int iota = 1;
+      pstmt.setString(iota++, newPhoto.description());
+      pstmt.setObject(iota++, id);
+
+      ResultSet rs = pstmt.executeQuery();
+      boolean hasFirst = rs.next();
+      if (!hasFirst) {
+        return new ResultModel(
+          "ERROR",
+          "photo may have been updated, but was not returned",
+          null
+        );
+      }
+
+      updatedPhoto = new PhotoModel(
+        (UUID)rs.getObject("id"),
+        rs.getString("description")
+      );
+    } catch (SQLException ex) {
+      logger.log(
+        Level.SEVERE,
+        "failed to update photo on db -- {0}",
+        ex.getMessage()
+      );
+
+      return new ResultModel(
+        "ERROR",
+        "failed to update photo on db",
+        null
+      );
+    }
+
+    return new ResultModel(
+      "INFO",
+      "updated photo succesfully",
+      updatedPhoto
+    );
   }
 
   @Override
