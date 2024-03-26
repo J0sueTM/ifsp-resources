@@ -4,6 +4,7 @@ import com.j0suetm.jgallery.components.PropsLoader;
 import com.j0suetm.jgallery.components.Migrator;
 import com.j0suetm.jgallery.components.BucketConnector;
 import com.j0suetm.jgallery.components.DBConnector;
+import com.j0suetm.jgallery.WebApp;
 
 import java.util.Properties;
 
@@ -44,5 +45,7 @@ public class Main {
     );
 
     s3Connr.setup();
+
+    WebApp wapp = new WebApp();
   }
 }
