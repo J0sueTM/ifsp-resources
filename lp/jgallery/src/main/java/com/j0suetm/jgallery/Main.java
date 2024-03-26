@@ -46,6 +46,6 @@ public class Main {
 
     s3Connr.setup();
 
-    WebApp wapp = new WebApp();
+    WebApp.start();
   }
 }

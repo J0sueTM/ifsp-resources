@@ -1,12 +1,10 @@
 plugins {
     application
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://europe-maven.pkg.dev/jxbrowser/releases")
-    }
 }
 
 dependencies {
@@ -16,7 +14,6 @@ dependencies {
     implementation("org.flywaydb:flyway-core:10.10.0")
     implementation("org.flywaydb:flyway-database-postgresql:10.1.0")
     implementation("software.amazon.awssdk:s3:2.25.16")
-    implementation("com.teamdev.jxbrowser:jxbrowser:7.12.2")
 
     testImplementation("org.testcontainers:testcontainers:1.19.7")
     testImplementation("org.testcontainers:postgresql:1.19.7")
@@ -38,4 +35,14 @@ application {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+
+javafx {
+    modules(
+      "javafx.base",
+      "javafx.graphics",
+      "javafx.controls",
+      "javafx.fxml",
+      "javafx.web"
+    )
 }

@@ -1,51 +1,51 @@
 package com.j0suetm.jgallery;
 
-import com.teamdev.jxbrowser.browser.Browser;
-import com.teamdev.jxbrowser.engine.Engine;
-import com.teamdev.jxbrowser.engine.EngineOptions;
-import com.teamdev.jxbrowser.view.swing.BrowserView;
-
-import javax.swing.*;
-import java.awt.*;
+import javafx.beans.value.ChangeListener;
+import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import javafx.scene.web.WebEngine;
+import static javafx.concurrent.Worker.State;
 
 public class WebApp
-  extends JFrame
+  extends Application
 {
-  private EngineOptions engOpts;
-  private Engine engine;
-  private Browser browser;
-  private BrowserView browserView;
+  @Override
+  public void start(final Stage stage) {
+    WebView view = new WebView();
+    final WebEngine engine = view.getEngine();
 
-  public WebApp() {
-    SwingUtilities.invokeLater(() -> {
-      this.setTitle("JGallery");
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.setSize(800, 600);
+    engine.load("localhost:3345");
+    engine
+      .getLoadWorker()
+      .stateProperty()
+      .addListener(new ChangeListener<State>() {
+        public void changed(
+          ObservableValue<? extends State> ov,
+          State oldState,
+          State newState
+        ) {
+          if (newState != State.SUCCEEDED) {
+            return;
+          }
 
-      this.engOpts = EngineOptions
-        .newBuilder()
-        .build();
+          stage.setTitle(engine.getTitle());
+        }
+      }
+    );
 
-      this.engine = Engine.newInstance(this.engOpts);
-      this.browser = this.engine.newBrowser();
+    VBox root = new VBox();
+    root.getChildren().add(view);
 
-      this.browserView = BrowserView.newInstance(this.browser);
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
 
-      this.browser
-        .navigation()
-        .loadUrl(
-          WebApp.class
-          .getClassLoader()
-          .getResource("public/index.html")
-          .toString()
-        );
-
-      this.getContentPane().add(
-        this.browserView,
-        BorderLayout.CENTER
-      );
-
-      this.setVisible(true);
-    });
+  public static void start() {
+    Application.launch();
   }
 }
