@@ -32,11 +32,17 @@ public class Main {
       props.getProperty("db.password")
     );
 
+    BucketConnector s3Connr = new BucketConnector(
+      props.getProperty("s3.bucketName")
+    );
+
     BucketConnector.connect(
       props.getProperty("s3.endpoint"),
       props.getProperty("s3.accessKey"),
       props.getProperty("s3.secretKey"),
       props.getProperty("s3.region")
     );
+
+    s3Connr.setup();
   }
 }

@@ -20,6 +20,12 @@ public class BucketConnector {
 
   private static S3Client client;
 
+  private static String bucketName;
+
+  public BucketConnector(String bn) {
+    bucketName = bn;
+  }
+
   public static void connect(
     String endpoint,
     String accessKey,
@@ -51,7 +57,7 @@ public class BucketConnector {
       .build();
   }
 
-  public static void setup(String bucketName) {
+  public void setup() {
     if (doesBucketExist(bucketName)) {
       return;
     }
@@ -91,5 +97,9 @@ public class BucketConnector {
 
   public static S3Client getClient() {
     return client;
+  }
+
+  public static String getBucketName() {
+    return bucketName;
   }
 }

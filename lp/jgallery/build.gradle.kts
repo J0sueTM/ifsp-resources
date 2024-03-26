@@ -16,6 +16,7 @@ dependencies {
 
     testImplementation("org.testcontainers:testcontainers:1.19.7")
     testImplementation("org.testcontainers:postgresql:1.19.7")
+    testImplementation("org.testcontainers:localstack:1.19.7")
     testImplementation(libs.junit.jupiter)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
