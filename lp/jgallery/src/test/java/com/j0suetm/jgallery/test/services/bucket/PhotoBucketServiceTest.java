@@ -39,7 +39,6 @@ public class PhotoBucketServiceTest {
   void setUp() {
     currentBucketName = "jgallery-" + UUID.randomUUID().toString();
     BucketConnector s3Connr = new BucketConnector(currentBucketName);
-
     BucketConnector.connect(
       localstack.getEndpoint().toString(),
       localstack.getAccessKey(),

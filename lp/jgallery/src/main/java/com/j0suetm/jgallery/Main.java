@@ -1,10 +1,12 @@
 package com.j0suetm.jgallery;
 
 import com.j0suetm.jgallery.components.PropsLoader;
+
+import software.amazon.awssdk.services.s3.S3Client;
+
 import com.j0suetm.jgallery.components.Migrator;
 import com.j0suetm.jgallery.components.BucketConnector;
 import com.j0suetm.jgallery.components.DBConnector;
-import com.j0suetm.jgallery.WebApp;
 
 import java.util.Properties;
 
@@ -46,6 +48,11 @@ public class Main {
 
     s3Connr.setup();
 
-    WebApp.start();
+    S3Client s3c = BucketConnector.getClient();
+    if (s3c == null) {
+      return;
+    }
+
+    s3c.close();
   }
 }

@@ -1,7 +1,6 @@
 package com.j0suetm.jgallery.components;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,25 +31,16 @@ public class BucketConnector {
     String secretKey,
     String region
   ) {
-    URI endpointURI;
-    try {
-      endpointURI = new URI(endpoint);
-    } catch (URISyntaxException ex) {
-      logger.log(
-        Level.SEVERE,
-        "failed to build s3 endpoint uri from {0}",
-        endpoint
-      );
-
-      return;
-    }
-
     client = S3Client
       .builder()
-      .endpointOverride(endpointURI)
+      .forcePathStyle(true)
+      .endpointOverride(URI.create(endpoint))
       .credentialsProvider(
         StaticCredentialsProvider.create(
-          AwsBasicCredentials.create(accessKey, secretKey)
+          AwsBasicCredentials.create(
+            accessKey,
+            secretKey
+          )
         )
       )
       .region(Region.of(region))
@@ -81,12 +71,12 @@ public class BucketConnector {
   }
 
   public static boolean doesBucketExist(String bucketName) {
-    HeadBucketRequest hbr = HeadBucketRequest
-      .builder()
-      .bucket(bucketName)
-      .build();
-
     try {
+      HeadBucketRequest hbr = HeadBucketRequest
+        .builder()
+        .bucket(bucketName)
+        .build();
+
       client.headBucket(hbr);
     } catch (NoSuchBucketException ex) {
       return false;
