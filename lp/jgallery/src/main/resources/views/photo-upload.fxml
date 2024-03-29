@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<VBox
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="com.j0suetm.jgallery.controllers.PhotoUploadController"
+>
+  <padding>
+    <Insets
+      left="20"
+      right="20"
+      top="20"
+      bottom="20"
+    />
+  </padding>
+
+  <Text text="Upload photo!"/>
+
+  <VBox>
+    <Label text="File:"/>
+    <Button
+      text="Choose file"
+      onAction="#loadPhotoFile"
+    />
+    <ImageView
+      fx:id="thumbnail"
+      fitWidth="200"
+      fitHeight="450"
+      pickOnBounds="true"
+      preserveRatio="true"
+    />
+  </VBox>
+
+  <VBox>
+    <Label text="Description:"/>
+    <TextArea fx:id="description"/>
+  </VBox>
+
+  <HBox>
+    <Button
+      fx:id="uploadBtn"
+      text="Upload"
+      onAction="#uploadPhoto"
+    />
+
+    <Button
+      fx:id="cancelBtn"
+      text="Cancel"
+      onAction="#goToPhotoList"
+    />
+  </HBox>
+</VBox>

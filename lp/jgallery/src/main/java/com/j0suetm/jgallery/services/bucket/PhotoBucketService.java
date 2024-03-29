@@ -3,12 +3,10 @@ package com.j0suetm.jgallery.services.bucket;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -21,7 +19,6 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
-import software.amazon.awssdk.core.ResponseBytes;
 
 public class PhotoBucketService
   implements BucketService
@@ -34,7 +31,7 @@ public class PhotoBucketService
     throws IllegalArgumentException
   {
     if (!(o instanceof BufferedImage)) {
-      throw new IllegalArgumentException("expected instance of File");
+      throw new IllegalArgumentException("expected instance of BufferedImage");
     }
     BufferedImage img = (BufferedImage)o;
 

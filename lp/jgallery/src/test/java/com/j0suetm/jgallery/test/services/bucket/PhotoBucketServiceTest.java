@@ -4,6 +4,7 @@ import com.j0suetm.jgallery.components.BucketConnector;
 import com.j0suetm.jgallery.services.bucket.PhotoBucketService;
 import com.j0suetm.jgallery.models.ResultModel;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -98,5 +99,6 @@ public class PhotoBucketServiceTest {
     assertEquals(res.level(), "INFO");
 
     BufferedImage retrievedImg = (BufferedImage)res.data();
+    assertNotNull(retrievedImg);
   }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="com.j0suetm.jgallery.controllers.PhotoListController"
+>
+  <padding>
+    <Insets
+      top="20"
+      bottom="20"
+      left="20"
+      right="20"
+    />
+  </padding>
+  <HBox>
+    <Button
+      fx:id="goToUploadBtn"
+      text="Upload new Photo"
+      onAction="#goToUpload"
+    />
+    <Button
+      fx:id="closeBtn"
+      text="Exit"
+      onAction="#exit"
+    />
+  </HBox>
+
+  <Pagination
+    fx:id="pagination"
+  >
+  </Pagination>
+</VBox>
